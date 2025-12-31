@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BESTIE_VOUCHERS } from '../../constants';
@@ -28,14 +27,6 @@ const VoucherScene: React.FC<Props> = ({ onComplete }) => {
             key={v.id}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            animate={selected.includes(v.id) ? { 
-              boxShadow: [
-                "0 0 0px rgba(251, 113, 133, 0)",
-                "0 0 20px rgba(251, 113, 133, 0.4)",
-                "0 0 0px rgba(251, 113, 133, 0)"
-              ] 
-            } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
             onClick={() => toggle(v.id)}
             className={`w-full p-5 rounded-3xl flex items-center justify-between border-2 transition-all duration-300 ${
               selected.includes(v.id) 

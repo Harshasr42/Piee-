@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DreamCategory, DreamItem } from '../../types';
@@ -18,7 +17,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
   const [isGenerating, setIsGenerating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
-  // Form States
   const [newLabel, setNewLabel] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newImg, setNewImg] = useState('');
@@ -31,7 +29,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
   
   const activeCategory = navStack.length > 0 ? navStack[navStack.length - 1] : null;
 
-  // Sync navStack when allCategories changes
   useEffect(() => {
     if (navStack.length > 0) {
       const updatedStack: DreamCategory[] = [];
@@ -199,7 +196,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
           exit={{ opacity: 0, x: -20 }}
           className="w-full h-full flex flex-col gap-4"
         >
-          {/* Header */}
           <div className="flex items-center justify-between min-h-[70px] pt-4">
             {navStack.length > 0 ? (
               <button onClick={() => setNavStack(prev => prev.slice(0, -1))} className="p-3 bg-white shadow-sm rounded-full text-rose-400 active:scale-90"><ArrowLeft size={20} /></button>
@@ -212,7 +208,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
             </div>
           </div>
 
-          {/* List Area */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto pr-1 space-y-4 custom-scroll pb-24">
             {((activeCategory ? activeCategory.subCategories : allCategories) || []).map((cat) => (
               <motion.div
@@ -252,7 +247,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
             ))}
           </div>
 
-          {/* Action Bar */}
           {!isAddingItem && !isAddingCategory && (
             <div className="absolute bottom-6 left-6 right-6 flex gap-2">
               {activeCategory && (
@@ -277,7 +271,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
         </motion.div>
       </AnimatePresence>
 
-      {/* Full Screen Editor Modal */}
       <AnimatePresence>
         {isAddingItem && (
           <motion.div 
@@ -336,7 +329,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
         )}
       </AnimatePresence>
 
-      {/* Category Modal */}
       <AnimatePresence>
         {isAddingCategory && (
           <motion.div 

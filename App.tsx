@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SceneType, Memory, DreamCategory } from './types';
@@ -16,8 +15,6 @@ import { ChevronLeft, Volume2, VolumeX, Settings, Heart, X, Mic } from 'lucide-r
 import confetti from 'https://cdn.skypack.dev/canvas-confetti';
 
 const App: React.FC = () => {
-  // --- PERSISTENCE & STATE ---
-  
   const ENABLED_SCENES = useMemo(() => [
     SceneType.CORE,
     SceneType.NOISE,
@@ -64,7 +61,6 @@ const App: React.FC = () => {
     localStorage.setItem('shreyaa_voicenotes', JSON.stringify(voiceNotes));
   }, [voiceNotes]);
 
-  // --- AUDIO LOGIC ---
   useEffect(() => {
     const audio = new Audio('https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
     audio.loop = true;
@@ -89,7 +85,6 @@ const App: React.FC = () => {
     }
   };
 
-  // --- NAVIGATION ---
   const currentIndex = ENABLED_SCENES.indexOf(currentScene);
 
   const nextScene = useCallback(() => {
@@ -134,8 +129,6 @@ const App: React.FC = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden text-[#5D4037] flex flex-col items-center justify-center bg-gradient-to-b from-[#FFF9F5] to-[#FFE8E8]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,182,193,0.1),transparent_70%)] pointer-events-none" />
-      
       <div className="fixed top-6 left-6 right-6 flex justify-between items-center z-50">
         <AnimatePresence>
           {currentIndex > 0 && !showThankYou && (
@@ -201,10 +194,6 @@ const App: React.FC = () => {
                     </div>
                   </div>
                 )}
-                
-                <div className="pt-6 border-t border-rose-50">
-                   <p className="text-[9px] text-rose-200 uppercase font-black text-center tracking-widest">Made for Shreyaa ✨</p>
-                </div>
               </div>
             </motion.div>
           </motion.div>

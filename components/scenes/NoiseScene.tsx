@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CLOUD_WORRIES } from '../../constants';
@@ -56,18 +55,6 @@ const NoiseScene: React.FC<Props> = ({ onComplete }) => {
             </motion.button>
           ))}
         </AnimatePresence>
-
-        {clearedIds.size === CLOUD_WORRIES.length && (
-          <motion.div 
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="absolute inset-0 flex items-center justify-center flex-col gap-4"
-          >
-            <div className="w-32 h-32 bg-orange-200 rounded-full blur-[60px] animate-pulse" />
-            <span className="text-4xl">☀️</span>
-            <p className="text-xl font-serif italic text-orange-400">Much better.</p>
-          </motion.div>
-        )}
       </div>
     </div>
   );

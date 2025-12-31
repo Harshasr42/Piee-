@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
@@ -46,7 +45,6 @@ const CoreScene: React.FC<Props> = ({ onComplete }) => {
       </div>
 
       <div className="relative w-64 h-64 flex items-center justify-center">
-        {/* Soft Glow Pulses */}
         <motion.div 
           animate={{ scale: isHolding ? 1.6 : 1, opacity: isHolding ? 0.6 : 0.2 }}
           className="absolute inset-0 bg-rose-200 rounded-full blur-[60px]" 
