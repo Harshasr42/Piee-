@@ -7,7 +7,7 @@ import CoreScene from './components/scenes/CoreScene';
 import NoiseScene from './components/scenes/NoiseScene';
 import VoucherScene from './components/scenes/VoucherScene';
 import MemoryScene from './components/scenes/MemoryScene';
-import UnfoldScene from './components/scenes/UnfoldScene';
+import LoveLetterScene from './components/scenes/LoveLetterScene';
 import ReasonsScene from './components/scenes/ReasonsScene';
 import PromiseScene from './components/scenes/PromiseScene';
 import DreamsScene from './components/scenes/DreamsScene';
@@ -34,6 +34,7 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [memories, setMemories] = useState<Memory[]>(() => {
@@ -118,7 +119,11 @@ const App: React.FC = () => {
 
     const interval: any = setInterval(function() {
       const timeLeft = animationEnd - Date.now();
-      if (timeLeft <= 0) return clearInterval(interval);
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        setShowThankYou(true);
+        return;
+      }
       const particleCount = 50 * (timeLeft / duration);
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#FFC0CB', '#FF69B4', '#FFD700'], shapes: [heart, 'circle'] });
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#FFC0CB', '#FF69B4', '#FFD700'], shapes: [heart, 'circle'] });
@@ -133,7 +138,7 @@ const App: React.FC = () => {
       
       <div className="fixed top-6 left-6 right-6 flex justify-between items-center z-50">
         <AnimatePresence>
-          {currentIndex > 0 && (
+          {currentIndex > 0 && !showThankYou && (
             <motion.button
               key="prev"
               initial={{ opacity: 0, x: -20 }}
@@ -147,12 +152,14 @@ const App: React.FC = () => {
           )}
         </AnimatePresence>
 
-        <button
-          onClick={() => setIsSettingsOpen(true)}
-          className="p-4 bg-white/60 backdrop-blur-md rounded-full text-rose-400 shadow-sm border border-white hover:bg-white transition-colors active:scale-90"
-        >
-          <Settings size={24} />
-        </button>
+        {!showThankYou && (
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="p-4 bg-white/60 backdrop-blur-md rounded-full text-rose-400 shadow-sm border border-white hover:bg-white transition-colors active:scale-90"
+          >
+            <Settings size={24} />
+          </button>
+        )}
       </div>
 
       <AnimatePresence>
@@ -206,50 +213,66 @@ const App: React.FC = () => {
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentScene}
+          key={currentScene + (showThankYou ? '-thanks' : '')}
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1.1, y: -30 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="w-full h-full flex items-center justify-center relative z-10"
         >
-          {currentScene === SceneType.CORE && <CoreScene onComplete={nextScene} />}
-          {currentScene === SceneType.NOISE && <NoiseScene onComplete={nextScene} />}
-          {currentScene === SceneType.VOUCHER && <VoucherScene onComplete={nextScene} />}
-          {currentScene === SceneType.ECHOES && (
-            <MemoryScene 
-              memories={memories} 
-              onUpdateMemories={setMemories} 
-              onComplete={nextScene} 
-            />
+          {showThankYou ? (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center space-y-6 px-10"
+            >
+              <Heart size={80} className="text-rose-400 mx-auto fill-rose-400 drop-shadow-xl" />
+              <h2 className="text-4xl font-serif text-rose-500 italic leading-tight">Thank You for this journey, Shreyaa.</h2>
+              <p className="text-rose-300 font-bold uppercase tracking-[0.2em] text-xs">You are truly one of a kind. ✨</p>
+            </motion.div>
+          ) : (
+            <>
+              {currentScene === SceneType.CORE && <CoreScene onComplete={nextScene} />}
+              {currentScene === SceneType.NOISE && <NoiseScene onComplete={nextScene} />}
+              {currentScene === SceneType.VOUCHER && <VoucherScene onComplete={nextScene} />}
+              {currentScene === SceneType.ECHOES && (
+                <MemoryScene 
+                  memories={memories} 
+                  onUpdateMemories={setMemories} 
+                  onComplete={nextScene} 
+                />
+              )}
+              {currentScene === SceneType.REASONS && <ReasonsScene onComplete={nextScene} />}
+              {currentScene === SceneType.DREAMS && (
+                <DreamsScene 
+                  onComplete={nextScene} 
+                  allCategories={dreamsData} 
+                  setAllCategories={setDreamsData} 
+                />
+              )}
+              {currentScene === ('REMEMBER' as any) && <RememberScene onComplete={handleSaveVoiceNote} />}
+              {currentScene === SceneType.PROMISE && <PromiseScene onComplete={nextScene} />}
+              {currentScene === SceneType.UNFOLD && <LoveLetterScene onOpen={triggerFinalConfetti} />}
+            </>
           )}
-          {currentScene === SceneType.REASONS && <ReasonsScene onComplete={nextScene} />}
-          {currentScene === SceneType.DREAMS && (
-            <DreamsScene 
-              onComplete={nextScene} 
-              allCategories={dreamsData} 
-              setAllCategories={setDreamsData} 
-            />
-          )}
-          {currentScene === ('REMEMBER' as any) && <RememberScene onComplete={handleSaveVoiceNote} />}
-          {currentScene === SceneType.PROMISE && <PromiseScene onComplete={nextScene} />}
-          {currentScene === SceneType.UNFOLD && <UnfoldScene onOpen={triggerFinalConfetti} />}
         </motion.div>
       </AnimatePresence>
       
-      <div className="fixed bottom-8 left-0 right-0 flex justify-center gap-3 z-50 pointer-events-none">
-        {ENABLED_SCENES.map((_, i) => (
-          <motion.div key={i} className="flex items-center justify-center" animate={{ width: i === currentIndex ? 24 : 8 }}>
-            {i === currentIndex ? (
-              <motion.div layoutId="progress-active" className="text-rose-400 flex items-center justify-center" initial={{ scale: 0.5, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}>
-                <Heart size={14} className="fill-rose-400" />
-              </motion.div>
-            ) : (
-              <div className={`h-2 rounded-full transition-all duration-500 w-2 bg-rose-100 ${i < currentIndex ? 'bg-rose-200' : ''}`} />
-            )}
-          </motion.div>
-        ))}
-      </div>
+      {!showThankYou && (
+        <div className="fixed bottom-8 left-0 right-0 flex justify-center gap-3 z-50 pointer-events-none">
+          {ENABLED_SCENES.map((_, i) => (
+            <motion.div key={i} className="flex items-center justify-center" animate={{ width: i === currentIndex ? 24 : 8 }}>
+              {i === currentIndex ? (
+                <motion.div layoutId="progress-active" className="text-rose-400 flex items-center justify-center" initial={{ scale: 0.5, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}>
+                  <Heart size={14} className="fill-rose-400" />
+                </motion.div>
+              ) : (
+                <div className={`h-2 rounded-full transition-all duration-500 w-2 bg-rose-100 ${i < currentIndex ? 'bg-rose-200' : ''}`} />
+              )}
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

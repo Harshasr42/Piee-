@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { LOVE_LETTER_CONTENT } from '../../constants';
+import { Heart } from 'lucide-react';
 
 const LetterScene: React.FC = () => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -10,12 +11,9 @@ const LetterScene: React.FC = () => {
     try {
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
       const now = audioCtx.currentTime;
-      
-      // Warm magical chime
       [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now + i * 0.05);
         gain.gain.setValueAtTime(0, now + i * 0.05);
         gain.gain.linearRampToValueAtTime(0.05, now + i * 0.05 + 0.05);
@@ -25,30 +23,7 @@ const LetterScene: React.FC = () => {
         osc.start(now + i * 0.05);
         osc.stop(now + i * 0.05 + 1.2);
       });
-      
-      // Subtle paper whoosh
-      const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.5, audioCtx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < audioCtx.sampleRate * 0.5; i++) {
-        output[i] = Math.random() * 2 - 1;
-      }
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = noiseBuffer;
-      const noiseFilter = audioCtx.createBiquadFilter();
-      noiseFilter.type = 'lowpass';
-      noiseFilter.frequency.setValueAtTime(1000, now);
-      noiseFilter.frequency.exponentialRampToValueAtTime(10, now + 0.5);
-      const noiseGain = audioCtx.createGain();
-      noiseGain.gain.setValueAtTime(0.02, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(audioCtx.destination);
-      noise.start(now);
-      noise.stop(now + 0.5);
-    } catch (e) {
-      console.warn("Audio Context failed to start.");
-    }
+    } catch (e) { console.warn(e); }
   }, []);
 
   const handleFlip = () => {
@@ -91,26 +66,26 @@ const LetterScene: React.FC = () => {
                 <span className="text-rose-500 font-bold tracking-[0.3em] text-xs">OPEN MY HEART ❤️</span>
               </motion.div>
             </div>
-            {/* Shimmer overlay */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full"
-              animate={{ translateX: ['-100%', '200%'] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-            />
           </div>
 
           {/* Back Side (The Message) */}
           <div 
-            className="absolute inset-0 w-full h-full backface-hidden rounded-[2.5rem] bg-[#fdfaf5] p-8 flex flex-col shadow-2xl border-4 border-white/90 overflow-hidden"
+            className="absolute inset-0 w-full h-full backface-hidden rounded-[2.5rem] bg-[#fdfaf5] p-10 flex flex-col shadow-2xl border-4 border-white/90 overflow-hidden"
             style={{ transform: 'rotateY(180deg)' }}
           >
-            {/* Soft decorative patterns */}
             <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#fb7185 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             
             <div className="flex-1 flex flex-col justify-center gap-8 relative z-10">
               <div className="w-16 h-1 bg-rose-200/50 rounded-full" />
-              <p className="text-[#5D4037] text-lg leading-relaxed font-medium whitespace-pre-wrap italic font-serif tracking-wide px-2">
+              <p className="text-[#5D4037] text-[1.2rem] leading-relaxed font-medium whitespace-pre-wrap italic font-serif tracking-wide px-2 group">
                 {LOVE_LETTER_CONTENT.body}
+                <motion.span 
+                  className="inline-block ml-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity }}
+                >
+                  <Heart size={14} className="fill-rose-300 text-rose-300" />
+                </motion.span>
               </p>
               <div className="w-16 h-1 bg-rose-200/50 rounded-full self-end" />
             </div>
@@ -119,7 +94,7 @@ const LetterScene: React.FC = () => {
               <p className="text-rose-400 font-black tracking-[0.3em] uppercase text-[9px] mb-2">
                 {LOVE_LETTER_CONTENT.footer}
               </p>
-              <p className="text-rose-500 font-serif text-2xl italic">{LOVE_LETTER_CONTENT.sender}</p>
+              <p className="text-rose-500 font-serif text-3xl italic">{LOVE_LETTER_CONTENT.sender}</p>
             </div>
           </div>
         </motion.div>
@@ -130,16 +105,6 @@ const LetterScene: React.FC = () => {
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
       `}</style>
-
-      {isFlipped && (
-        <motion.p 
-          initial={{ opacity: 0, y: 10 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="text-rose-400 font-serif italic text-xl"
-        >
-          You are my everything, Shreyaa ✨
-        </motion.p>
-      )}
     </div>
   );
 };
