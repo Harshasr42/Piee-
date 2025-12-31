@@ -85,20 +85,19 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
     setIsGeneratingCaption(true);
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Corrected API structure
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: [
-          {
-            parts: [
-              { inlineData: { data: base64Img.split(',')[1], mimeType: 'image/jpeg' } },
-              { text: "Generate a very short, heartwarming, and poetic caption for this photo of two best friends. Max 10 words." }
-            ]
-          }
-        ]
+        contents: {
+          parts: [
+            { inlineData: { data: base64Img.split(',')[1], mimeType: 'image/jpeg' } },
+            { text: "Generate a very short, heartwarming, and poetic caption for this photo of two best friends. Max 10 words." }
+          ]
+        }
       });
       return response.text?.trim().replace(/"/g, '') || "A beautiful moment...";
     } catch (err) {
-      console.error(err);
+      console.error("AI Caption Error:", err);
       return "A moment we'll never forget...";
     } finally {
       setIsGeneratingCaption(false);
@@ -123,6 +122,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
         const updated = [...memories, newMemory];
         onUpdateMemories(updated);
         setShowFavoritesOnly(false);
+        // Jump to the newly added memory and update the total count
         setIndex(updated.length - 1);
       };
       reader.readAsDataURL(file);
@@ -139,7 +139,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
   if (filteredMemories.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 gap-6">
+      <div className="flex flex-col items-center justify-center p-8 gap-6 h-full">
         <Star size={48} className="text-rose-100" />
         <p className="text-rose-300 italic text-center">No favorites yet, Shreyaa! <br/> Tap the star on your favorite moments.</p>
         <button onClick={() => setShowFavoritesOnly(false)} className="px-6 py-2 bg-rose-50 text-rose-500 rounded-full font-black uppercase text-[10px] tracking-widest">Show All Moments</button>
@@ -148,32 +148,33 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
   }
 
   return (
-    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm py-12 px-4 relative">
-      <div className="flex justify-between w-full mb-4 px-2">
+    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm pt-24 pb-12 px-4 relative">
+      <div className="flex justify-between w-full mb-8 px-2">
         <button 
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-          className={`p-3 rounded-2xl flex items-center gap-2 transition-all ${showFavoritesOnly ? 'bg-rose-500 text-white shadow-lg' : 'bg-white text-rose-300 border border-rose-50'}`}
+          className={`p-3.5 rounded-2xl flex items-center gap-2 transition-all border shadow-sm ${showFavoritesOnly ? 'bg-rose-500 text-white border-rose-600' : 'bg-white text-rose-400 border-rose-100'}`}
         >
-          <Filter size={16} />
-          <span className="text-[10px] font-black uppercase tracking-widest">{showFavoritesOnly ? "Favorites" : "All"}</span>
+          <Filter size={18} />
+          <span className="text-[11px] font-black uppercase tracking-widest">{showFavoritesOnly ? "Favorites" : "All"}</span>
         </button>
         
         <button 
           onClick={() => fileInputRef.current?.click()}
-          className="p-3 bg-white text-rose-400 rounded-2xl border border-rose-50 shadow-sm active:scale-90 flex items-center gap-2"
+          className="p-3.5 bg-white text-rose-500 rounded-2xl border border-rose-100 shadow-sm active:scale-90 flex items-center gap-2"
         >
-          <Camera size={16} />
-          <span className="text-[10px] font-black uppercase tracking-widest">Add Memory</span>
+          <Camera size={18} />
+          <span className="text-[11px] font-black uppercase tracking-widest">Add Memory</span>
         </button>
       </div>
 
       <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} accept="image/*" />
 
+      {/* Dynamic Memory Counter Badge */}
       <motion.div 
         key={`badge-${index}-${filteredMemories.length}`}
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-4 bg-rose-500/10 backdrop-blur-md px-6 py-2 rounded-full border border-rose-200 shadow-sm"
+        className="mb-6 bg-rose-500/10 backdrop-blur-md px-8 py-2.5 rounded-full border border-rose-200 shadow-sm"
       >
         <p className="text-rose-600 font-bold text-xs tracking-widest uppercase">
           Memory <span className="text-rose-700 font-black">{index + 1}</span> of <span className="text-rose-700 font-black">{filteredMemories.length}</span>
@@ -200,7 +201,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
             exit={{ opacity: 0, x: -50, rotate: -10, scale: 0.8 }}
             transition={{ type: 'spring', damping: 25, stiffness: 120 }}
             onClick={handleMemoryTap}
-            className="w-full h-full bg-white p-4 shadow-2xl flex flex-col gap-4 cursor-pointer transform origin-center relative"
+            className="w-full h-full bg-white p-4 shadow-2xl flex flex-col gap-4 cursor-pointer transform origin-center relative border border-rose-50/50"
           >
             <div className="absolute top-6 right-6 flex flex-col gap-3 z-30">
               <button 
@@ -249,9 +250,9 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
       </div>
 
       <div className="space-y-4 text-center mt-6">
-        <div className="flex gap-1 justify-center max-w-[280px] flex-wrap">
+        <div className="flex gap-1.5 justify-center max-w-[280px] flex-wrap">
           {filteredMemories.map((_, i) => (
-            <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'w-4 bg-rose-400' : 'w-1 bg-rose-100'}`} />
+            <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'w-5 bg-rose-400' : 'w-1.5 bg-rose-100'}`} />
           ))}
         </div>
         <p className="text-rose-300 text-[10px] uppercase font-bold tracking-widest">

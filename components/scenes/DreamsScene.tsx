@@ -67,34 +67,41 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
       alert("Describe your dream or add a reference photo first! ✨");
       return;
     }
+
+    if (!process.env.API_KEY) {
+      alert("API Key is missing! Please set it in your environment. ✨");
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const prompt = `Convert this into a beautiful, high-quality Studio Ghibli anime style illustration. 
-      Subject: ${newLabel || 'A magical dream world'}. 
-      Mood: ${newDesc || 'Soft lighting, whimsical atmosphere, nostalgic feel'}. 
-      Style: Vibrant watercolors, detailed hand-drawn lines, dreamy and warm. Like a still frame from a Miyazaki movie.`;
+      const promptText = `Convert this into a beautiful, high-quality Studio Ghibli anime style illustration. Subject: ${newLabel || 'A magical dream world'}. Mood: ${newDesc || 'Soft lighting, whimsical atmosphere, nostalgic feel'}. Style: Vibrant watercolors, detailed hand-drawn lines, dreamy and warm.`;
       
-      const parts: any[] = [{ text: prompt }];
+      const parts: any[] = [{ text: promptText }];
+      
       if (newImg.startsWith('data:image')) {
         parts.push({
-          inlineData: { data: newImg.split(',')[1], mimeType: 'image/png' }
+          inlineData: { data: newImg.split(',')[1], mimeType: 'image/jpeg' }
         });
       }
 
+      // Fixed API structure: contents should be { parts: [...] }
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
-        contents: [{ parts }],
+        contents: { parts },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
 
       const imagePart = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
       if (imagePart?.inlineData?.data) {
         setNewImg(`data:image/png;base64,${imagePart.inlineData.data}`);
+      } else {
+        throw new Error("No image data returned from spirits.");
       }
     } catch (err) {
-      console.error(err);
-      alert("The spirits are shy today. Try again in a moment! ✨");
+      console.error("Ghiblify Error:", err);
+      alert("The spirits are a bit shy right now. Check your prompt or try again in a minute! ✨");
     } finally {
       setIsGenerating(false);
     }
