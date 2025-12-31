@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Memory } from '../../types';
@@ -169,15 +170,15 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
       <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} accept="image/*" />
 
-      {/* NEW: Memory Counter Badge */}
+      {/* Prominent Memory Counter */}
       <motion.div 
         key={`badge-${index}-${filteredMemories.length}`}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-4 bg-rose-100/50 backdrop-blur-md px-6 py-2 rounded-full border border-rose-200 shadow-sm"
+        className="mb-4 bg-rose-500/10 backdrop-blur-md px-6 py-2 rounded-full border border-rose-200 shadow-sm"
       >
-        <p className="text-rose-500 font-bold text-xs tracking-widest uppercase">
-          Memory <span className="text-rose-600 font-black">{index + 1}</span> of <span className="text-rose-600 font-black">{filteredMemories.length}</span>
+        <p className="text-rose-600 font-bold text-xs tracking-widest uppercase">
+          Memory <span className="text-rose-700 font-black">{index + 1}</span> of <span className="text-rose-700 font-black">{filteredMemories.length}</span>
         </p>
       </motion.div>
 
