@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Memory } from '../../types';
@@ -84,8 +85,8 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
   const generateAICaption = async (base64Img: string) => {
     setIsGeneratingCaption(true);
     try {
+      // Using API_KEY directly from process.env as per platform requirements
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      // Corrected API structure
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: {
@@ -97,7 +98,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
       });
       return response.text?.trim().replace(/"/g, '') || "A beautiful moment...";
     } catch (err) {
-      console.error("AI Caption Error:", err);
+      console.error("AI Generation Error:", err);
       return "A moment we'll never forget...";
     } finally {
       setIsGeneratingCaption(false);
@@ -122,7 +123,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
         const updated = [...memories, newMemory];
         onUpdateMemories(updated);
         setShowFavoritesOnly(false);
-        // Jump to the newly added memory and update the total count
         setIndex(updated.length - 1);
       };
       reader.readAsDataURL(file);
@@ -148,11 +148,12 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
   }
 
   return (
-    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm pt-24 pb-12 px-4 relative">
-      <div className="flex justify-between w-full mb-8 px-2">
+    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm pt-28 pb-12 px-4 relative">
+      {/* Improved Header Spacing */}
+      <div className="flex justify-between w-full mb-6 px-2 z-50">
         <button 
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-          className={`p-3.5 rounded-2xl flex items-center gap-2 transition-all border shadow-sm ${showFavoritesOnly ? 'bg-rose-500 text-white border-rose-600' : 'bg-white text-rose-400 border-rose-100'}`}
+          className={`p-3.5 rounded-2xl flex items-center gap-2 transition-all shadow-md border ${showFavoritesOnly ? 'bg-rose-500 text-white border-rose-600' : 'bg-white text-rose-400 border-rose-100'}`}
         >
           <Filter size={18} />
           <span className="text-[11px] font-black uppercase tracking-widest">{showFavoritesOnly ? "Favorites" : "All"}</span>
@@ -160,7 +161,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
         
         <button 
           onClick={() => fileInputRef.current?.click()}
-          className="p-3.5 bg-white text-rose-500 rounded-2xl border border-rose-100 shadow-sm active:scale-90 flex items-center gap-2"
+          className="p-3.5 bg-white text-rose-500 rounded-2xl border border-rose-100 shadow-md active:scale-90 flex items-center gap-2"
         >
           <Camera size={18} />
           <span className="text-[11px] font-black uppercase tracking-widest">Add Memory</span>
@@ -169,12 +170,12 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
       <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} accept="image/*" />
 
-      {/* Dynamic Memory Counter Badge */}
+      {/* Prominent Counter Badge */}
       <motion.div 
         key={`badge-${index}-${filteredMemories.length}`}
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-6 bg-rose-500/10 backdrop-blur-md px-8 py-2.5 rounded-full border border-rose-200 shadow-sm"
+        className="mb-4 bg-rose-500/10 backdrop-blur-md px-10 py-2.5 rounded-full border border-rose-200 shadow-sm"
       >
         <p className="text-rose-600 font-bold text-xs tracking-widest uppercase">
           Memory <span className="text-rose-700 font-black">{index + 1}</span> of <span className="text-rose-700 font-black">{filteredMemories.length}</span>
