@@ -1,8 +1,7 @@
-
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Memory } from '../../types';
-import { Star, Share2, Trash2, Camera, Wand2, Loader2, Sparkles, Filter, X } from 'lucide-react';
+import { Star, Share2, Trash2, Camera, Loader2, Filter } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface Props {
@@ -92,7 +91,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
           {
             parts: [
               { inlineData: { data: base64Img.split(',')[1], mimeType: 'image/jpeg' } },
-              { text: "Generate a very short, heartwarming, and poetic caption for this photo of two best friends. It should be in the style of a sweet memory or an inside joke. Max 10 words." }
+              { text: "Generate a very short, heartwarming, and poetic caption for this photo of two best friends. Max 10 words." }
             ]
           }
         ]
@@ -123,7 +122,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
         
         const updated = [...memories, newMemory];
         onUpdateMemories(updated);
-        // Navigate to the newly added memory
         setShowFavoritesOnly(false);
         setIndex(updated.length - 1);
       };
@@ -151,7 +149,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
   return (
     <div className="flex flex-col items-center justify-between h-full w-full max-w-sm py-12 px-4 relative">
-      {/* Top Controls */}
       <div className="flex justify-between w-full mb-4 px-2">
         <button 
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
@@ -172,7 +169,18 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
       <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} accept="image/*" />
 
-      {/* Scrapbook View */}
+      {/* NEW: Memory Counter Badge */}
+      <motion.div 
+        key={`badge-${index}-${filteredMemories.length}`}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-4 bg-rose-100/50 backdrop-blur-md px-6 py-2 rounded-full border border-rose-200 shadow-sm"
+      >
+        <p className="text-rose-500 font-bold text-xs tracking-widest uppercase">
+          Memory <span className="text-rose-600 font-black">{index + 1}</span> of <span className="text-rose-600 font-black">{filteredMemories.length}</span>
+        </p>
+      </motion.div>
+
       <div className="relative w-full aspect-[3/4] flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
@@ -195,7 +203,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
             onClick={handleMemoryTap}
             className="w-full h-full bg-white p-4 shadow-2xl flex flex-col gap-4 cursor-pointer transform origin-center relative"
           >
-            {/* Action Buttons */}
             <div className="absolute top-6 right-6 flex flex-col gap-3 z-30">
               <button 
                 onClick={toggleFavorite}
@@ -238,28 +245,21 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
                 </p>
               )}
             </div>
-            
-            <div className="absolute bottom-2 right-4 text-[10px] text-rose-200 font-mono">
-              #{index + 1} / {filteredMemories.length}
-            </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <div className="space-y-4 text-center">
+      <div className="space-y-4 text-center mt-6">
         <div className="flex gap-1 justify-center max-w-[280px] flex-wrap">
           {filteredMemories.map((_, i) => (
             <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'w-4 bg-rose-400' : 'w-1 bg-rose-100'}`} />
           ))}
         </div>
-        <div className="flex flex-col gap-1">
-          <p className="text-rose-300 text-[10px] uppercase font-bold tracking-widest">
-            {isEditing ? "Editing caption..." : "Swipe left to delete • Tap to zoom"}
-          </p>
-        </div>
+        <p className="text-rose-300 text-[10px] uppercase font-bold tracking-widest">
+          {isEditing ? "Editing caption..." : "Swipe left to delete • Tap to zoom"}
+        </p>
       </div>
 
-      {/* Delete Confirmation Overlay */}
       <AnimatePresence>
         {deleteId !== null && (
           <motion.div 
