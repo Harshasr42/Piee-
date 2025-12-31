@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DreamCategory, DreamItem } from '../../types';
@@ -71,7 +70,6 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
 
     setIsGenerating(true);
     try {
-      // Accessing process.env.API_KEY directly to leverage platform injection
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const promptText = `Convert this into a beautiful, high-quality Studio Ghibli anime style illustration. Subject: ${newLabel || 'A magical dream world'}. Mood: ${newDesc || 'Soft lighting, whimsical atmosphere, nostalgic feel'}. Style: Vibrant watercolors, detailed hand-drawn lines, dreamy and warm.`;
       
@@ -83,19 +81,26 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
         });
       }
 
-      // Fixed: SDK expects contents as an object with parts for multimodal inputs
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: { parts },
         config: { imageConfig: { aspectRatio: "16:9" } }
       });
 
-      const imagePart = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
-      if (imagePart?.inlineData?.data) {
-        setNewImg(`data:image/png;base64,${imagePart.inlineData.data}`);
-      } else {
-        throw new Error("No image data returned.");
+      // Robust part iteration to find the image
+      let foundImage = false;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData?.data) {
+            setNewImg(`data:image/png;base64,${part.inlineData.data}`);
+            foundImage = true;
+            break;
+          }
+        }
       }
+
+      if (!foundImage) throw new Error("The spirits were shy and didn't return an image.");
+      
     } catch (err) {
       console.error("Ghiblify Error:", err);
       alert("The spirits are a bit shy right now. Please try again in a moment! ✨");
@@ -319,7 +324,7 @@ const DreamsScene: React.FC<Props> = ({ onComplete, allCategories, setAllCategor
 
               <div className="grid grid-cols-2 gap-3 mt-4">
                 <button onClick={ghiblifyImage} disabled={isGenerating || (!newImg && !newLabel)} className="col-span-1 bg-gradient-to-br from-rose-500 to-orange-400 text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg active:scale-95 disabled:opacity-50">
-                  < Wand2 size={16} /> Ghiblify ✨
+                  <Wand2 size={16} /> Ghiblify ✨
                 </button>
                 {newImg !== originalImg && originalImg !== '' && (
                   <button onClick={() => setNewImg(originalImg)} className="col-span-1 bg-rose-50 text-rose-500 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"><RotateCcw size={16} /> Revert</button>

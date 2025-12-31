@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Memory } from '../../types';
@@ -85,7 +84,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
   const generateAICaption = async (base64Img: string) => {
     setIsGeneratingCaption(true);
     try {
-      // Using API_KEY directly from process.env as per platform requirements
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -123,6 +121,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
         const updated = [...memories, newMemory];
         onUpdateMemories(updated);
         setShowFavoritesOnly(false);
+        // Ensure index jumps to new item and total count is updated
         setIndex(updated.length - 1);
       };
       reader.readAsDataURL(file);
@@ -148,8 +147,7 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
   }
 
   return (
-    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm pt-28 pb-12 px-4 relative">
-      {/* Improved Header Spacing */}
+    <div className="flex flex-col items-center justify-between h-full w-full max-w-sm pt-32 pb-12 px-4 relative">
       <div className="flex justify-between w-full mb-6 px-2 z-50">
         <button 
           onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
@@ -170,7 +168,6 @@ const MemoryScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }
 
       <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} accept="image/*" />
 
-      {/* Prominent Counter Badge */}
       <motion.div 
         key={`badge-${index}-${filteredMemories.length}`}
         initial={{ opacity: 0, y: -20 }}
