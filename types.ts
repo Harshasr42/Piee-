@@ -28,3 +28,18 @@ export interface Voucher {
   title: string;
   cost: string;
 }
+
+export interface DreamItem {
+  id: string;
+  label: string;
+  description: string;
+  image: string;
+}
+
+export interface DreamCategory {
+  id: string;
+  title: string;
+  icon: string;
+  items?: DreamItem[];
+  subCategories?: DreamCategory[];
+}

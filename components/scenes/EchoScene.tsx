@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Memory } from '../../types';
-import { Plus, Trash2, Camera } from 'lucide-react';
+import { Trash2, Camera } from 'lucide-react';
 
 interface Props {
   memories: Memory[];
@@ -13,6 +13,9 @@ interface Props {
 const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) => {
   const [index, setIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Guard access to the current memory
+  const currentMemory = memories && memories.length > index ? memories[index] : null;
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -26,7 +29,7 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
           caption: 'A new moment we share...'
         };
         onUpdateMemories([...memories, newMemory]);
-        setIndex(memories.length); // Switch to the new photo
+        setIndex(memories.length); 
       };
       reader.readAsDataURL(file);
     }
@@ -40,6 +43,10 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
     setIndex(prev => Math.min(prev, newMemories.length - 1));
   };
 
+  if (!currentMemory) {
+    return <div className="text-rose-300 italic">Empty scrapbook...</div>;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-8 gap-8">
       <div className="text-center">
@@ -50,7 +57,7 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
       <div className="relative w-full max-w-xs aspect-[4/5]">
         <AnimatePresence mode="wait">
           <motion.div
-            key={memories[index].id}
+            key={currentMemory.id}
             initial={{ opacity: 0, rotate: -5, scale: 0.9 }}
             animate={{ opacity: 1, rotate: index % 2 === 0 ? 2 : -2, scale: 1 }}
             exit={{ opacity: 0, x: -100, rotate: -10 }}
@@ -58,14 +65,13 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
             className="w-full h-full relative p-4 bg-white shadow-xl rounded-sm flex flex-col gap-4 cursor-pointer group"
             onClick={() => index === memories.length - 1 ? onComplete() : setIndex(i => i + 1)}
           >
-            {/* Washi Tape Effect */}
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-8 bg-rose-200/40 backdrop-blur-sm -rotate-2 z-20 border border-white/30" />
             
             <div className="flex-1 overflow-hidden bg-rose-50 rounded-sm relative">
-              <img src={memories[index].url} className="w-full h-full object-cover" alt="Memory" />
+              <img src={currentMemory.url || ''} className="w-full h-full object-cover" alt="Memory" />
               
               <button 
-                onClick={(e) => deleteMemory(e, memories[index].id)}
+                onClick={(e) => deleteMemory(e, currentMemory.id)}
                 className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-md rounded-full text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-rose-50"
               >
                 <Trash2 size={16} />
@@ -74,7 +80,7 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
             
             <div className="h-16 flex items-center justify-center">
               <p className="text-[#8D6E63] font-serif italic text-center text-sm">
-                {memories[index].caption}
+                {currentMemory.caption}
               </p>
             </div>
             
@@ -108,7 +114,6 @@ const EchoScene: React.FC<Props> = ({ memories, onUpdateMemories, onComplete }) 
             ))}
           </div>
         </div>
-        
         <p className="text-rose-300 text-[10px] uppercase font-bold tracking-[0.2em] animate-pulse">
           Tap photo to turn page • Click camera to add yours
         </p>
