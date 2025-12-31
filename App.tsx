@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SceneType, Memory, DreamCategory } from './types';
 import { MEMORIES, FUTURE_DREAMS_CATEGORIES } from './constants';
@@ -11,13 +11,13 @@ import UnfoldScene from './components/scenes/UnfoldScene';
 import ReasonsScene from './components/scenes/ReasonsScene';
 import PromiseScene from './components/scenes/PromiseScene';
 import DreamsScene from './components/scenes/DreamsScene';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import RememberScene from './components/scenes/RememberScene';
+import { ChevronLeft, Volume2, VolumeX, Settings, Heart, X, Mic } from 'lucide-react';
 import confetti from 'https://cdn.skypack.dev/canvas-confetti';
 
 const App: React.FC = () => {
   // --- PERSISTENCE & STATE ---
   
-  // Define active scenes
   const ENABLED_SCENES = useMemo(() => [
     SceneType.CORE,
     SceneType.NOISE,
@@ -25,25 +25,32 @@ const App: React.FC = () => {
     SceneType.ECHOES,
     SceneType.REASONS,
     SceneType.DREAMS,
+    'REMEMBER' as any,
     SceneType.PROMISE,
     SceneType.UNFOLD
   ], []);
 
   const [currentScene, setCurrentScene] = useState<SceneType>(ENABLED_SCENES[0]);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Persistent memories state
   const [memories, setMemories] = useState<Memory[]>(() => {
     const saved = localStorage.getItem('shreyaa_memories');
     return saved ? JSON.parse(saved) : MEMORIES;
   });
 
-  // Persistent dreams state
   const [dreamsData, setDreamsData] = useState<DreamCategory[]>(() => {
     const saved = localStorage.getItem('shreyaa_dreams');
     return saved ? JSON.parse(saved) : FUTURE_DREAMS_CATEGORIES;
   });
 
-  // Effect to save data on changes
+  const [voiceNotes, setVoiceNotes] = useState<any[]>(() => {
+    const saved = localStorage.getItem('shreyaa_voicenotes');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   useEffect(() => {
     localStorage.setItem('shreyaa_memories', JSON.stringify(memories));
   }, [memories]);
@@ -52,37 +59,40 @@ const App: React.FC = () => {
     localStorage.setItem('shreyaa_dreams', JSON.stringify(dreamsData));
   }, [dreamsData]);
 
-  // --- BACKGROUND EFFECTS ---
   useEffect(() => {
-    const container = document.createElement('div');
-    container.className = 'fixed inset-0 pointer-events-none overflow-hidden z-0';
-    document.body.appendChild(container);
+    localStorage.setItem('shreyaa_voicenotes', JSON.stringify(voiceNotes));
+  }, [voiceNotes]);
 
-    for (let i = 0; i < 40; i++) {
-      const p = document.createElement('div');
-      p.className = 'absolute text-rose-200/20 text-xl pointer-events-none';
-      p.innerHTML = Math.random() > 0.5 ? '♥' : '✨';
-      p.style.left = `${Math.random() * 100}vw`;
-      p.style.top = `${Math.random() * 100}vh`;
-      p.animate([
-        { transform: 'translateY(0) rotate(0deg) scale(0.8)', opacity: 0.1 },
-        { transform: `translateY(-150px) rotate(${Math.random() * 360}deg) scale(1.5)`, opacity: 0.4 },
-        { transform: 'translateY(-300px) rotate(0deg) scale(0.5)', opacity: 0 }
-      ], {
-        duration: Math.random() * 10000 + 5000,
-        iterations: Infinity,
-        easing: 'ease-in-out'
-      });
-      container.appendChild(p);
-    }
+  // --- AUDIO LOGIC ---
+  useEffect(() => {
+    const audio = new Audio('https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
+    audio.loop = true;
+    audio.volume = isMuted ? 0 : volume;
+    audioRef.current = audio;
 
-    return () => { if (container && document.body.contains(container)) document.body.removeChild(container); };
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
   }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
+
+  const startMusic = () => {
+    if (audioRef.current && audioRef.current.paused) {
+      audioRef.current.play().catch(e => console.log("Audio play blocked by browser", e));
+    }
+  };
 
   // --- NAVIGATION ---
   const currentIndex = ENABLED_SCENES.indexOf(currentScene);
 
   const nextScene = useCallback(() => {
+    startMusic();
     if (currentIndex < ENABLED_SCENES.length - 1) {
       setCurrentScene(ENABLED_SCENES[currentIndex + 1]);
     }
@@ -93,6 +103,11 @@ const App: React.FC = () => {
       setCurrentScene(ENABLED_SCENES[currentIndex - 1]);
     }
   }, [currentIndex, ENABLED_SCENES]);
+
+  const handleSaveVoiceNote = (data: string) => {
+    setVoiceNotes(prev => [...prev, { id: Date.now(), data, date: new Date().toISOString() }]);
+    nextScene();
+  };
 
   const triggerFinalConfetti = useCallback(() => {
     const duration = 15 * 1000;
@@ -116,19 +131,76 @@ const App: React.FC = () => {
     <div className="relative w-full h-screen overflow-hidden text-[#5D4037] flex flex-col items-center justify-center bg-gradient-to-b from-[#FFF9F5] to-[#FFE8E8]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,182,193,0.1),transparent_70%)] pointer-events-none" />
       
-      {/* Global Navigation Overlay */}
+      <div className="fixed top-6 left-6 right-6 flex justify-between items-center z-50">
+        <AnimatePresence>
+          {currentIndex > 0 && (
+            <motion.button
+              key="prev"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              onClick={prevScene}
+              className="p-4 bg-white/60 backdrop-blur-md rounded-full text-rose-400 shadow-sm border border-white hover:bg-white transition-colors active:scale-90"
+            >
+              <ChevronLeft size={24} />
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        <button
+          onClick={() => setIsSettingsOpen(true)}
+          className="p-4 bg-white/60 backdrop-blur-md rounded-full text-rose-400 shadow-sm border border-white hover:bg-white transition-colors active:scale-90"
+        >
+          <Settings size={24} />
+        </button>
+      </div>
+
       <AnimatePresence>
-        {currentIndex > 0 && (
-          <motion.button
-            key="prev"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            onClick={prevScene}
-            className="fixed top-6 left-6 z-50 p-4 bg-white/60 backdrop-blur-md rounded-full text-rose-400 shadow-sm border border-white hover:bg-white transition-colors active:scale-90"
+        {isSettingsOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-rose-900/10 backdrop-blur-sm flex items-center justify-center p-6"
           >
-            <ChevronLeft size={24} />
-          </motion.button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="w-full max-w-xs bg-white rounded-[2.5rem] p-8 shadow-2xl relative"
+            >
+              <button onClick={() => setIsSettingsOpen(false)} className="absolute top-6 right-6 text-rose-200 hover:text-rose-400 transition-colors"><X size={24} /></button>
+              <h3 className="text-xl font-serif text-rose-500 italic mb-8">Settings</h3>
+              
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-rose-400">
+                    <span className="text-[10px] font-black uppercase tracking-widest">Music Volume</span>
+                    <button onClick={() => setIsMuted(!isMuted)}>{isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
+                  </div>
+                  <input type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => setVolume(parseFloat(e.target.value))} className="w-full h-1.5 bg-rose-50 rounded-full appearance-none accent-rose-400 cursor-pointer" />
+                </div>
+
+                {voiceNotes.length > 0 && (
+                  <div className="pt-6 border-t border-rose-50">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-rose-400 mb-4">Saved Voice Notes</p>
+                    <div className="max-h-40 overflow-y-auto space-y-2 custom-scroll pr-2">
+                      {voiceNotes.map((note, i) => (
+                        <button key={i} onClick={() => new Audio(note.data).play()} className="w-full flex items-center gap-3 p-3 bg-rose-50 rounded-xl text-rose-500 hover:bg-rose-100 transition-colors text-left">
+                          <Mic size={14} />
+                          <span className="text-[10px] font-bold">Note {i + 1}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="pt-6 border-t border-rose-50">
+                   <p className="text-[9px] text-rose-200 uppercase font-black text-center tracking-widest">Made for Shreyaa ✨</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -159,15 +231,23 @@ const App: React.FC = () => {
               setAllCategories={setDreamsData} 
             />
           )}
+          {currentScene === ('REMEMBER' as any) && <RememberScene onComplete={handleSaveVoiceNote} />}
           {currentScene === SceneType.PROMISE && <PromiseScene onComplete={nextScene} />}
           {currentScene === SceneType.UNFOLD && <UnfoldScene onOpen={triggerFinalConfetti} />}
         </motion.div>
       </AnimatePresence>
       
-      {/* Progress Indicator */}
-      <div className="fixed bottom-6 left-0 right-0 flex justify-center gap-1.5 z-50 pointer-events-none">
+      <div className="fixed bottom-8 left-0 right-0 flex justify-center gap-3 z-50 pointer-events-none">
         {ENABLED_SCENES.map((_, i) => (
-          <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === currentIndex ? 'w-8 bg-rose-400' : 'w-2 bg-rose-100'}`} />
+          <motion.div key={i} className="flex items-center justify-center" animate={{ width: i === currentIndex ? 24 : 8 }}>
+            {i === currentIndex ? (
+              <motion.div layoutId="progress-active" className="text-rose-400 flex items-center justify-center" initial={{ scale: 0.5, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}>
+                <Heart size={14} className="fill-rose-400" />
+              </motion.div>
+            ) : (
+              <div className={`h-2 rounded-full transition-all duration-500 w-2 bg-rose-100 ${i < currentIndex ? 'bg-rose-200' : ''}`} />
+            )}
+          </motion.div>
         ))}
       </div>
     </div>

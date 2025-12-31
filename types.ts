@@ -21,6 +21,7 @@ export interface Memory {
   id: number;
   url: string;
   caption: string;
+  isFavorite?: boolean;
 }
 
 export interface Voucher {
