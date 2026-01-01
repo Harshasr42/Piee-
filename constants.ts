@@ -52,54 +52,49 @@ export const CLOUD_WORRIES: Bubble[] = [
 
 
 export const MEMORIES: Memory[] = [
-
   {
     id: 1,
-    url: '/scrapbook/memories/standing-with-you.png',
-    caption: 'Standing next to you felt natural — like that’s where I belong.'
+    url: '/scrapbook/memories/you-were-happy.png',
+    caption: 'One of the Most Fav Image in my Life ❤️🥹 '
   },
   {
     id: 2,
-    url: '/scrapbook/memories/quiet-strength.png',
-    caption: 'Even in silence, you give me strength without trying.'
+    url: '/scrapbook/memories/standing-with-you.png',
+    caption: 'my biceps are ur fav thing ryt 🤭 -btw i love that cute arm hug 🤗.'
   },
   {
     id: 3,
-    url: '/scrapbook/memories/comfortable-silence.png',
-    caption: 'Some moments don’t need words. This was one of them.'
+    url: '/scrapbook/memories/quiet-strength.png',
+    caption: 'Leaving ur awkardness and standing like a Queen 👑'
   },
   {
     id: 4,
     url: '/scrapbook/memories/same-step.png',
-    caption: 'Walking at the same pace, without forcing anything.'
+    caption: 'All the blessing from god ninne tagobitta , Innocent girl 😁🤭'
   },
   {
     id: 5,
     url: '/scrapbook/memories/you-smiled-first.png',
-    caption: 'You smiled first — and my whole day quietly changed.'
+    caption: 'Naan en maadide antha ithara itidya 😅 - mangu mari 😅'
   },
   {
     id: 6,
     url: '/scrapbook/memories/safe-with-you.png',
-    caption: 'With you, I feel safe being exactly who I am.'
+    caption: 'See even the Tree expects u to hug it 🤭 adake it has leaned to ur back 🫣'
   },
   {
     id: 7,
     url: '/scrapbook/memories/your-smile-fixed-my-day.png',
-    caption: 'That smile fixed more than you’ll ever know.'
+    caption: 'Our first Corner House Visit 😜 never gonna forget this...'
   },
+ 
   {
     id: 8,
-    url: '/scrapbook/memories/you-were-happy.png',
-    caption: 'Seeing you happy is still my favorite sight.'
+    url: '/scrapbook/memories/standing-close.png',
+    caption: 'Very Cute Picture of Us , Loved It ✨'
   },
   {
     id: 9,
-    url: '/scrapbook/memories/standing-close.png',
-    caption: 'Not too close. Not too far. Just right.'
-  },
-  {
-    id: 10,
     url: '/scrapbook/memories/small-fun-moment.png',
     caption: 'If this scrapbook ends here, I just want you to know — every moment with you mattered to me.'
   }
