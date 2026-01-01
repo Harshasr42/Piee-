@@ -52,57 +52,53 @@ export const CLOUD_WORRIES: Bubble[] = [
 
 
 export const MEMORIES: Memory[] = [
-  { 
-    id: 1, 
-    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800', 
-    caption: 'That time we couldn\'t stop laughing over nothing.' 
+  {
+    id: 1,
+    url: '/scrapbook/memories/standing-with-you.png',
+    caption: 'Standing next to you felt natural — like that’s where I belong.'
   },
-  { 
-    id: 2, 
-    url: 'https://images.unsplash.com/photo-1522165078649-823cf4dbaf46?q=80&w=800', 
-    caption: 'Best friend therapy sessions are the best.' 
+  {
+    id: 2,
+    url: '/scrapbook/memories/quiet-strength.png',
+    caption: 'Even in silence, you give me strength without trying.'
   },
-  { 
-    id: 3, 
-    url: 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=800', 
-    caption: 'You make every moment feel like sunshine, Shreyaa.' 
+  {
+    id: 3,
+    url: '/scrapbook/memories/comfortable-silence.png',
+    caption: 'Some moments don’t need words. This was one of them.'
   },
-  { 
-    id: 4, 
-    url: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=800', 
-    caption: 'To a thousand more inside jokes! 🥂' 
+  {
+    id: 4,
+    url: '/scrapbook/memories/same-step.png',
+    caption: 'Walking at the same pace, without forcing anything.'
   },
   {
     id: 5,
-    url: 'https://images.unsplash.com/photo-1496449903678-68ddcb189a24?q=80&w=800',
-    caption: 'Every coffee date with you is a core memory.'
+    url: '/scrapbook/memories/you-smiled-first.png',
+    caption: 'You smiled first — and my whole day quietly changed.'
   },
   {
     id: 6,
-    url: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800',
-    caption: 'The support you give me is my biggest strength.'
+    url: '/scrapbook/memories/safe-with-you.png',
+    caption: 'With you, I feel safe being exactly who I am.'
   },
   {
     id: 7,
-    url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800',
-    caption: 'True friendship is rare, and I found it in you.'
+    url: '/scrapbook/memories/your-smile-fixed-my-day.png',
+    caption: 'That smile fixed more than you’ll ever know.'
   },
   {
     id: 8,
-    url: 'https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?q=80&w=800',
-    caption: 'Your happiness is my favorite thing to witness.'
+    url: '/scrapbook/memories/you-were-happy.png',
+    caption: 'Seeing you happy is still my favorite sight.'
   },
   {
     id: 9,
-    url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800',
-    caption: 'Thank you for staying through every high and low.'
-  },
-  {
-    id: 10,
-    url: 'https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=800',
-    caption: 'Soulmates come in the form of best friends too.'
+    url: '/scrapbook/memories/standing-close.png',
+    caption: 'Not too close. Not too far. Just right.'
   }
 ];
+
 
 export const REASONS_WHY = [
   "The way you listen without judgment, like my feelings are always safe with you.",
