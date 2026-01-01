@@ -258,7 +258,7 @@ I hope you always know this: you never have to be strong all the time, and you n
 
 Just be with me always, don’t leave me 😖. You mean a lot to me in my life — more than anyone ever has 🥺.`,
   signOff: "Always here ❤️,",
-  sender: "Your Heegu Unte 🤭",
+  sender: "Your Heegu Untee 🤭",
   coverImage: "https://images.unsplash.com/photo-1516589174184-c6858b1a274a?q=80&w=800",
   footer: "Est. Friendship Infinity"
 };
