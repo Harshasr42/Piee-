@@ -102,7 +102,7 @@ const RememberScene: React.FC<Props> = ({ nickname, onComplete, onStatusChange }
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-8 gap-10">
       <div className="text-center space-y-3">
-        <h2 className="text-3xl font-serif text-rose-500 italic">Echoes of Today</h2>
+        <h2 className="text-3xl font-serif text-rose-500 italic">Echoes to wispher 🫣</h2>
         <p className="text-rose-300 text-[10px] uppercase font-black tracking-widest">Record a voice note for {nickname}</p>
       </div>
 
