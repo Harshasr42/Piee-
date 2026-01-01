@@ -253,8 +253,8 @@ Thank you for the care you give so naturally — the kind that doesn’t make no
 I hope you always know this: you never have to be strong all the time, and you never have to explain yourself to be understood. I’ll always wish for your happiness, your peace, and the gentle smile you carry without realizing how powerful it is.
 
 Just be with me always, don’t leave me 😖. You mean a lot to me in my life — more than anyone ever has 🥺.`,
-  signOff: "Always here,",
-  sender: "Your Bestie",
+  signOff: "Always here ❤️,",
+  sender: "Your Heegu Unte 🤭",
   coverImage: "https://images.unsplash.com/photo-1516589174184-c6858b1a274a?q=80&w=800",
   footer: "Est. Friendship Infinity"
 };
