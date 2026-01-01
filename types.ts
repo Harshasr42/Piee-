@@ -10,6 +10,16 @@ export enum SceneType {
   UNFOLD = 'UNFOLD'
 }
 
+export type ThemeType = 'rose' | 'lavender' | 'gold' | 'sea';
+
+export interface ThemeColors {
+  primary: string;
+  secondary: string;
+  accent: string;
+  bg: string;
+  text: string;
+}
+
 export interface Bubble {
   id: string;
   label: string;
@@ -22,6 +32,14 @@ export interface Memory {
   url: string;
   caption: string;
   isFavorite?: boolean;
+  voiceNoteId?: number;
+}
+
+export interface VoiceNote {
+  id: number;
+  data: string;
+  date: string;
+  duration?: string;
 }
 
 export interface Voucher {
