@@ -105,14 +105,15 @@ export const MEMORIES: Memory[] = [
 ];
 
 export const REASONS_WHY = [
-  "The way you listen without judgment.",
-  "Your contagious laugh that brightens the room.",
-  "How you always know exactly what to say.",
-  "Your resilience through every tough day.",
-  "The little ways you show you care.",
-  "Your unwavering belief in me.",
-  "Because you are simply, purely yourself."
+  "The way you listen without judgment, like my feelings are always safe with you.",
+  "Your laugh that somehow sneaks into my bad days and fixes them quietly.",
+  "How you always know exactly what to say, even when I don’t know what I’m feeling.",
+  "That soft little hug you give when something goes wrong, like saying “why did you even notice my mistake?” 🤭",
+  "The way you find my sadness in a split second, even in the middle of a crowd.",
+  "How you never hesitate to do anything for me, just because I asked.",
+  "Because you are simply, purely yourself — and that’s more than enough for me."
 ];
+
 
 export const FUTURE_DREAMS_CATEGORIES: DreamCategory[] = [
   {
