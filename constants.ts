@@ -244,13 +244,18 @@ export const BESTIE_VOUCHERS: Voucher[] = [
 export const LOVE_LETTER_CONTENT = {
   recipient: "Hey Shreyaa,",
   title: "My Favorite Human",
-  body: `I was sitting here thinking about how much brighter life has become since you stepped into it. You have this incredible gift for turning ordinary days into core memories with just a single laugh or a thoughtful text. 
+  body: `I don’t think I ever properly told you this, but life genuinely feels lighter since you became a part of it. Not louder, not dramatic — just calmer, safer, and more real. Somehow, even ordinary days feel easier to get through when I know you exist in them.
 
-Thank you for being the person who truly sees me—the one who knows my coffee order, my worst jokes, and my biggest dreams. You're the one I want to share every win with, and the first person I reach for when things get tough.
+You have this quiet way of noticing things — especially me. You catch my silence before I explain it, my sadness before I admit it, and my mood even when I try to hide it behind jokes. That itself means more to me than you probably realize. There are moments when just you asking “what happened?” fixes something inside me that I didn’t know was hurting.
 
-You deserve a year filled with as much kindness, joy, and peace as you give to everyone around you. I am so lucky to call you my best friend, my confidante, and my soulmate in the truest sense of the word. I'm so proud of you, and I'll always be your biggest cheerleader.`,
-  signOff: "Always here for you,",
-  sender: "Your Bestie ✨",
+Thank you for the care you give so naturally — the kind that doesn’t make noise, but stays. Thank you for the hugs that say more than words, for standing by me in ways that feel effortless to you but unforgettable to me. You don’t try to fix everything, and that’s what makes you special — you simply stay, and that is enough.
+
+I hope you always know this: you never have to be strong all the time, and you never have to explain yourself to be understood. I’ll always wish for your happiness, your peace, and the gentle smile you carry without realizing how powerful it is.
+
+Just be with me always, don’t leave me 😖. You mean a lot to me in my life — more than anyone ever has 🥺.`,
+  signOff: "Always here,",
+  sender: "Your Bestie",
   coverImage: "https://images.unsplash.com/photo-1516589174184-c6858b1a274a?q=80&w=800",
   footer: "Est. Friendship Infinity"
 };
+
