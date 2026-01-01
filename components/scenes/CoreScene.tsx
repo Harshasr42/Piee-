@@ -9,7 +9,7 @@ interface Props {
   onProgressChange?: (progress: number) => void;
 }
 
-const CoreScene: React.FC<Props> = ({ greeting = 'Hi, Shreyaa...', onComplete, onProgressChange }) => {
+const CoreScene: React.FC<Props> = ({ greeting = 'Hi, Piee...', onComplete, onProgressChange }) => {
   const [progress, setProgress] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
   const [particles, setParticles] = useState<{ id: number; x: number; y: number }[]>([]);
