@@ -96,6 +96,11 @@ export const MEMORIES: Memory[] = [
     id: 9,
     url: '/scrapbook/memories/standing-close.png',
     caption: 'Not too close. Not too far. Just right.'
+  },
+  {
+    id: 10,
+    url: '/scrapbook/memories/small-fun-moment.png',
+    caption: 'If this scrapbook ends here, I just want you to know — every moment with you mattered to me.'
   }
 ];
 
