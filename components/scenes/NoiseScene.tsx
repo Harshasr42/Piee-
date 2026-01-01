@@ -81,11 +81,11 @@ const NoiseScene: React.FC<Props> = ({ nickname, onComplete }) => {
             </motion.div>
             <div className="space-y-6">
               <h2 className="text-2xl font-bold leading-relaxed text-[#5D4037]">
-                Yay u cleared all the unwanted in ur life and moving on to wanted thing further
+                Yayyy 🥳 u cleared all the unwanted things in ur life and moving on to wanted things further
                 <span className="text-rose-500 italic"> (like me 😁😉)</span>
               </h2>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="text-4xl font-serif text-rose-500 italic mt-4">
-                mrng mrng sunshine ✨
+                Always with u sunshine ✨
               </motion.p>
             </div>
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 3.5, ease: "linear" }} className="w-32 h-1 bg-rose-200 rounded-full origin-left" />
