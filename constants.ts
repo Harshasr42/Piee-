@@ -6,13 +6,50 @@ import { Bubble, Memory, Voucher, DreamCategory } from './types';
  */
 
 export const CLOUD_WORRIES: Bubble[] = [
-  { id: '1', label: 'Exam Stress', icon: '📝', color: '#FFD1D1' },
-  { id: '2', label: 'Late Nights', icon: '🌙', color: '#FFE8D6' },
-  { id: '3', label: 'Self Doubt', icon: '✨', color: '#D4F1F4' },
-  { id: '4', label: 'The Grumps', icon: '☁️', color: '#E2F0CB' },
-  { id: '5', label: 'Tiredness', icon: '☕', color: '#FCE1E4' },
-  { id: '6', label: 'Bad Days', icon: '🌧️', color: '#BEE7E8' },
+  { 
+    id: '1', 
+    label: 'Exam stress you never talk about', 
+    icon: '📝', 
+    color: '#FFD1D1' 
+  },
+  { 
+    id: '2', 
+    label: 'Late nights with a tired smile', 
+    icon: '🌙', 
+    color: '#FFE8D6' 
+  },
+  { 
+    id: '3', 
+    label: 'Moments when you doubt yourself', 
+    icon: '✨', 
+    color: '#D4F1F4' 
+  },
+  { 
+    id: '4', 
+    label: 'Grumpy moods that don’t last long', 
+    icon: '☁️', 
+    color: '#E2F0CB' 
+  },
+  { 
+    id: '5', 
+    label: 'Being tired but still showing up', 
+    icon: '☕', 
+    color: '#FCE1E4' 
+  },
+  { 
+    id: '6', 
+    label: 'Those quiet bad days', 
+    icon: '🌧️', 
+    color: '#BEE7E8' 
+  },
+  {
+    id: '7',
+    label: 'Carrying more than you let on',
+    icon: '🫂',
+    color: '#E6D9FF'
+  }
 ];
+
 
 export const MEMORIES: Memory[] = [
   { 
