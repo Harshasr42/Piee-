@@ -10,7 +10,7 @@ interface Props {
   onComplete: () => void;
 }
 
-const VoucherScene: React.FC<Props> = ({ title = 'Bestie Vouchers', nickname, onComplete }) => {
+const VoucherScene: React.FC<Props> = ({ title = 'Vouchers Just For You Piee ✨', nickname, onComplete }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
   const toggle = (id: string) => {
