@@ -246,8 +246,8 @@ export const BESTIE_VOUCHERS: Voucher[] = [
 
 
 export const LOVE_LETTER_CONTENT = {
-  recipient: "Hey Shreyaa,",
-  title: "My Favorite Human",
+  recipient: "Hey Cutiee Piee ✨,",
+  title: "My Favorite Human ❤️",
   body: `I don’t think I ever properly told you this, but life genuinely feels lighter since you became a part of it. Not louder, not dramatic — just calmer, safer, and more real. Somehow, even ordinary days feel easier to get through when I know you exist in them.
 
 You have this quiet way of noticing things — especially me. You catch my silence before I explain it, my sadness before I admit it, and my mood even when I try to hide it behind jokes. That itself means more to me than you probably realize. There are moments when just you asking “what happened?” fixes something inside me that I didn’t know was hurting.
