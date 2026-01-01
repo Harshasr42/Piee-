@@ -100,7 +100,7 @@ export const MEMORIES: Memory[] = [
   {
     id: 10,
     url: '/scrapbook/memories/small-fun-moment.png',
-    caption: 'If this scrapbook ends here, I just want you to know — every moment with you mattered to me.'
+    caption: 'If this scrapbook ends here, I just want you to know — every moment with you mattered to me.❤️'
   }
 ];
 
