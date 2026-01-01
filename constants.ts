@@ -203,10 +203,43 @@ export const FUTURE_DREAMS_CATEGORIES: DreamCategory[] = [
 ];
 
 export const BESTIE_VOUCHERS: Voucher[] = [
-  { id: 'v1', title: '3 AM Crisis Call Pass', cost: '1 Packet of Chips' },
-  { id: 'v2', title: 'Unlimited "You were right" Stamps', cost: 'Free' },
-  { id: 'v3', title: 'Spontaneous Movie Night', cost: 'Your Presence' },
+  {
+    id: 'v1',
+    title: 'Anytime You Need to Talk',
+    cost: 'Only if you feel like it 🤍'
+  },
+  {
+    id: 'v2',
+    title: 'Unlimited “You Were Right” Stamps',
+    cost: 'Always free'
+  },
+  {
+    id: 'v3',
+    title: 'A Movie or a Walk, Someday Maybe',
+    cost: 'Whenever it feels comfortable'
+  },
+  {
+    id: 'v4',
+    title: 'Unlimited Playful Hit Pass',
+    cost: 'Only the cute, non-serious kind 😄'
+  },
+  {
+    id: 'v5',
+    title: 'Go Anywhere You Choose',
+    cost: 'When you want company, I’m there'
+  },
+  {
+    id: 'v6',
+    title: 'Study & Career Support Buddy',
+    cost: 'Whenever you need help or motivation'
+  },
+  {
+    id: 'v7',
+    title: 'Everything for That Little Smile',
+    cost: 'Because your care already means everything to me'
+  }
 ];
+
 
 export const LOVE_LETTER_CONTENT = {
   recipient: "Hey Shreyaa,",
