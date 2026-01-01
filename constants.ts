@@ -52,6 +52,7 @@ export const CLOUD_WORRIES: Bubble[] = [
 
 
 export const MEMORIES: Memory[] = [
+
   {
     id: 1,
     url: '/scrapbook/memories/standing-with-you.png',
@@ -105,6 +106,8 @@ export const MEMORIES: Memory[] = [
 ];
 
 
+
+ 
 export const REASONS_WHY = [
   "The way you listen without judgment, like my feelings are always safe with you.",
   "Your laugh that somehow sneaks into my bad days and fixes them quietly.",
